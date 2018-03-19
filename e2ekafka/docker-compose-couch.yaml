@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: '2'
+version: '3'
 
 services:
   couchdb0:
@@ -15,7 +15,12 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "5984:5984"
+      - "6984:5984"
+    volumes:
+      - ./data/hyperleger/peers/peer0.org1.example.com/data:/opt/couchdb/data
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.150
 
   peer0.org1.example.com:
     environment:
@@ -25,6 +30,9 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
       - couchdb0
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.130
 
   couchdb1:
     container_name: couchdb1
@@ -35,7 +43,12 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "6984:5984"
+      - "7984:5984"
+    volumes:
+      - ./data/hyperleger/peers/peer1.org1.example.com/data:/opt/couchdb/data
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.151
 
   peer1.org1.example.com:
     environment:
@@ -45,6 +58,9 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
       - couchdb1
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.131
 
   couchdb2:
     container_name: couchdb2
@@ -55,9 +71,14 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "7984:5984"
+      - "8984:5984"
+    volumes:
+      - ./data/hyperleger/peers/peer2.org1.example.com/data:/opt/couchdb/data
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.152
 
-  peer0.org2.example.com:
+  peer2.org1.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
@@ -65,6 +86,9 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
       - couchdb2
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.132
 
   couchdb3:
     container_name: couchdb3
@@ -75,9 +99,14 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "8984:5984"
+      - "9984:5984"
+    volumes:
+      - ./data/hyperleger/peers/peer3.org1.example.com/data:/opt/couchdb/data
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.153
 
-  peer1.org2.example.com:
+  peer3.org1.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
@@ -85,3 +114,62 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
       - couchdb3
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.133
+
+  couchdb4:
+    container_name: couchdb4
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "10984:5984"
+    volumes:
+      - ./data/hyperleger/peers/peer0.org2.example.com/data:/opt/couchdb/data
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.154
+
+  peer0.org2.example.com:
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    depends_on:
+      - couchdb4
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.134
+
+  couchdb5:
+    container_name: couchdb5
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "11984:5984"
+    volumes:
+      - ./data/hyperleger/peers/peer1.org2.example.com/data:/opt/couchdb/data
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.155
+
+  peer1.org2.example.com:
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    depends_on:
+      - couchdb5
+    networks:
+      app_net:
+        ipv4_address: 192.168.3.135
